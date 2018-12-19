@@ -4,27 +4,49 @@ namespace App\Service;
 
 use Michelf\MarkdownInterface;
 use Psr\Log\LoggerInterface;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Component\Cache\Adapter\AdapterInterface;
 
 class MarkdownHelper
 {
+    /** @var AdapterInterface */
     private $cache;
+
+    /** @var MarkdownInterface */
     private $markdown;
+
+    /** @var LoggerInterface */
     private $logger;
+
+    /** @var bool */
     private $isDebug;
 
-    public function __construct(AdapterInterface $cache, MarkdownInterface $markdown, LoggerInterface $markdownLogger, bool $isDebug)
+    /** @var Security */
+    private $security;
+
+    /**
+     * MarkdownHelper constructor.
+     * @param AdapterInterface $cache
+     * @param MarkdownInterface $markdown
+     * @param LoggerInterface $markdownLogger
+     * @param bool $isDebug
+     * @param Security $security
+     */
+    public function __construct(AdapterInterface $cache, MarkdownInterface $markdown, LoggerInterface $markdownLogger, bool $isDebug, Security $security)
     {
         $this->cache = $cache;
         $this->markdown = $markdown;
         $this->logger = $markdownLogger;
         $this->isDebug = $isDebug;
+        $this->security = $security;
     }
 
     public function parse(string $source): string
     {
         if (stripos($source, 'bacon') !== false) {
-            $this->logger->info('They are talking about bacon again!');
+            $this->logger->info('They are talking about bacon again!', [
+                'user' => $this->security->getUser()
+            ]);
         }
 
         // skip caching entirely in debug
