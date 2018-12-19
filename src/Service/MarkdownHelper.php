@@ -4,8 +4,8 @@ namespace App\Service;
 
 use Michelf\MarkdownInterface;
 use Psr\Log\LoggerInterface;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Component\Cache\Adapter\AdapterInterface;
+use Symfony\Component\Security\Core\Security;
 
 class MarkdownHelper
 {
